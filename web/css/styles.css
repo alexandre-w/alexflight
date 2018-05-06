@@ -1,4 +1,4 @@
-body { background: #F5F5F5; font: 18px/1.5 sans-serif; }
+body { background: #F5F5F5; font: 18px/1.5 sans-serif; color:#6c757d }
 
 .form-signin {
   margin: 0 auto;
@@ -15,4 +15,8 @@ body { background: #F5F5F5; font: 18px/1.5 sans-serif; }
 
 .price{
   color: #0f9d58;
+}
+
+.container {
+  margin-top: 20px;
 }
