@@ -1,4 +1,4 @@
-Symfony Standard Edition
+Symfony web app for flight booking example
 ========================
 
 **WARNING**: This distribution does not support Symfony 4. See the
