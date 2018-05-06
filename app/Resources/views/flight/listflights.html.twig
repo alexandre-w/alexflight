@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+List of flights - AlexTravel
+{% endblock %}
+
+{% block body %}
+<div class="container">
+<h4>All the flights </h4>
+
+{% if flights %}
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Flight Number</th>
+      <th scope="col">Flying From</th>
+      <th scope="col">Flying To</th>
+      <th scope="col">Date</th>
+      <th scope="col">Seats left</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for flight in flights %}
+    <tr>
+      <th scope "row">{{ flight.flightNumber }}</th>
+      <td>{{ flight.flyingFrom |capitalize}}</td>
+      <td>{{ flight.flyingTo |capitalize}}</td>
+      <td>{{ flight.departingDate |date("d/m/Y")  }}</td>
+      <td>{{ flight.seatsLeft}}</td>
+      <td>
+        <a class="btn btn-outline-danger" href="{{ path("removeflight", { 'flightId': flight.id }) }}" role="button">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+  No flights in the database
+{% endif %}
+
+
+</div>
+
+{% endblock %}

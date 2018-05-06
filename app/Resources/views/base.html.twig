@@ -23,10 +23,11 @@
           <div class="navbar-nav mr-auto">
             <a class="nav-item nav-link" href="{{ path('flight') }}">Flights</a>
             {% if is_granted('ROLE_ADMIN') %}
-              <a class="nav-item nav-link" href="{{ path('createflight')}}">Create flight </a>
+              <a class="nav-item nav-link" href="{{ path('createflight') }}">Create flight </a>
+              <a class="nav-item nav-link" href="{{ path('listflights')  }}">List of flights </a>
             {% endif %}
 
-            {% if app.user %}
+            {% if is_granted('ROLE_USER') %}
             <a class="nav-item nav-link" href="{{ path('manageFlight')}}">My flights</a>
             {% endif %}
           </div>

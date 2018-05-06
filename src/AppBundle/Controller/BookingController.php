@@ -36,7 +36,7 @@ class BookingController extends Controller
       $em->persist($newBooking);
       $em->flush();
 
-      return $this->render("flight/thanksbooking.html.twig");
+      return $this->render("booking/thanksbooking.html.twig");
     }
 
 }

@@ -17,6 +17,8 @@ use AppBundle\Entity\Booking;
 class FlightController extends Controller
 {
 
+
+
     /**
      * @Route("/flight", name="flight")
      */
@@ -105,12 +107,13 @@ class FlightController extends Controller
         $em->persist($flight);
         $em->flush();
 
+        $this->addFlash('info', 'Flight Created : ' . $form_data['flightNumber'] );
+
       }
 
 
       return $this->render("flight/createflight.html.twig", array(
         'form' => $form->createView(),
-        'flightCreated' => $flight
       ));
     }
 
@@ -126,8 +129,42 @@ class FlightController extends Controller
       $bookings = $repo->getAllBookingsPerCustomer($user->getId());
 
 
-      return $this->render("flight/manageflight.html.twig", array(
+      return $this->render("booking/manageBooking.html.twig", array(
         'customerBookings' => $bookings
       ));
     }
+
+
+    /**
+     * @Route("/listflights", name="listflights")
+     */
+    public function listAction(Request $request)
+    {
+      $flights = $this->getDoctrine()->getRepository(Flight::class)->findAll();
+
+        return $this->render('flight/listflights.html.twig', [
+          'flights' => $flights,
+        ]);
+    }
+
+    /**
+     * @Route("/removeflight/{flightId}", name="removeflight")
+     */
+    public function removeAction(Request $request, $flightId){
+
+      $flightToRemove = $this->getDoctrine()->getRepository(Flight::class)->find($flightId);
+      $flightNumber = $flightToRemove->getFlightNumber();
+      $em = $this->getDoctrine()->getManager();
+      $em->remove($flightToRemove);
+      $em->flush();
+
+      $flights = $this->getDoctrine()->getRepository(Flight::class)->findAll();
+
+      $this->addFlash('info', 'Flight Deleted : ' . $flightNumber);
+
+      return $this->render('flight/listflights.html.twig', [
+          'flights' => $flights,
+      ]);
+    }
+
 }

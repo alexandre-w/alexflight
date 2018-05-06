@@ -37,8 +37,8 @@ Search a flight - AlexTravel
       {% for flight in foundFlights %}
       <tr>
         <th scope "row">{{flight.flightNumber }}</th>
-        <td>{{ flight.flyingFrom }}</td>
-        <td>{{ flight.flyingTo }}</td>
+        <td>{{ flight.flyingFrom |capitalize }}</td>
+        <td>{{ flight.flyingTo |capitalize }}</td>
         <td>{{ flight.departingDate |date("d/m/Y")  }}</td>
 
         <td><span class="price">$100</span> </td>
