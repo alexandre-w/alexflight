@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Create a flight - AlexTravel
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-2">  </div>
+    <div class="col-3"> <h4>Create a flight</h4> </div>
+    <div class="col-4">
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+    </div>
+    <div class="col-3">  </div>
+  </div>
+</div>
+
+
+{% if flightCreated.flightNumber %}
+ <p> The flight {{flightCreated.flightNumber}} is created</p>
+{% endif %}
+
+
+{% endblock %}

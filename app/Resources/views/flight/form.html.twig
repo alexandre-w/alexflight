@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Search a flight - AlexTravel
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-2">  </div>
+    <div class="col-3"> <h4>Search a flight</h4> </div>
+    <div class="col-4">
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+    </div>
+    <div class="col-3">  </div>
+  </div>
+</div>
+
+
+{% if foundFlights %}
+<div class="container">
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Flight Number</th>
+        <th scope="col">Flying From</th>
+        <th scope="col">Flying To</th>
+        <th scope="col">Date</th>
+        <th scope="col">Price</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for flight in foundFlights %}
+      <tr>
+        <th scope "row">{{flight.flightNumber }}</th>
+        <td>{{ flight.flyingFrom }}</td>
+        <td>{{ flight.flyingTo }}</td>
+        <td>{{ flight.departingDate |date("d/m/Y")  }}</td>
+
+        <td><span class="price">$100</span> </td>
+        <td>
+        <a class="btn btn-outline-info" href="{{ path("bookflight", { 'flightId': flight.id , 'passengers': passengers }) }}" role="button">BOOK</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+
+</div>
+
+
+{% endblock %}

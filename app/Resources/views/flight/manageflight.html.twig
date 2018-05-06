@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Create a flight - AlexTravel
+{% endblock %}
+
+{% block body %}
+<div class="container">
+<h1>Manage My flights </h1>
+
+{% if customerBookings %}
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Flight Number</th>
+      <th scope="col">Flying From</th>
+      <th scope="col">Flying To</th>
+      <th scope="col">Date</th>
+      <th scope="col">Reserved seats</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for booking in customerBookings %}
+    <tr>
+      <th scope "row">{{ booking.flight.flightNumber }}</th>
+      <td>{{ booking.flight.flyingFrom }}</td>
+      <td>{{ booking.flight.flyingTo }}</td>
+      <td>{{ booking.flight.departingDate |date("d/m/Y")  }}</td>
+      <td>{{ booking.reservedSeats}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+  No bookings are registered for you.
+{% endif %}
+
+
+
+
+
+
+
+</div>
+
+{% endblock %}

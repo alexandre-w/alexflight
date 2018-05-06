@@ -1,0 +1,34 @@
+AppBundle\Entity\Flight:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\FlightRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        flyingFrom:
+            type: string
+            length: 255
+            column: flying_from
+        flyingTo:
+            type: string
+            length: 255
+            column: flying_to
+        departingDate:
+            type: datetime
+            column: departing_date
+        seatsLeft:
+            type: integer
+            column: seats_left
+        flightNumber:
+            type: string
+            length: 100
+            column: flight_number
+    lifecycleCallbacks: {  }
+    oneToMany:
+        bookings:
+            targetEntity: Booking
+            mappedBy: Flight
