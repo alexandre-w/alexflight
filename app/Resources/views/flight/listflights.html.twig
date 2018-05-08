@@ -8,7 +8,7 @@ List of flights - AlexTravel
 <div class="container">
 <h4>All the flights </h4>
 
-{% if flights %}
+{% if pagination %}
 
 <table class="table table-striped">
   <thead>
@@ -22,7 +22,7 @@ List of flights - AlexTravel
     </tr>
   </thead>
   <tbody>
-    {% for flight in flights %}
+    {% for flight in pagination %}
     <tr>
       <th scope "row">{{ flight.flightNumber }}</th>
       <td>{{ flight.flyingFrom |capitalize}}</td>
@@ -35,7 +35,11 @@ List of flights - AlexTravel
     </tr>
     {% endfor %}
   </tbody>
-</table>
+</table
+  <div class="navigation justify-content-center">
+      {{ knp_pagination_render(pagination) }}
+  </div>
+
 
 {% else %}
   No flights in the database

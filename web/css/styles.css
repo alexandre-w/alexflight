@@ -17,6 +17,26 @@ body { background: #F5F5F5; font: 18px/1.5 sans-serif; color:#6c757d }
   color: #0f9d58;
 }
 
+
+
 .container {
   margin-top: 20px;
+}
+
+ul.pagination{
+  display: inline-flex;
+}
+
+div.container nav {
+  text-align: center;
+}
+
+.page-item.active .page-link {
+  background-color:  #17a2b8;
+  border-color:  #17a2b8;
+}
+
+.page-link {
+  color: #17a2b8;
+  }
 }

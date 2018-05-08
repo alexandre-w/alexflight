@@ -5,14 +5,15 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use AppBundle\Entity\Flight;
+use AppBundle\Form\FlightType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Entity\Booking;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class FlightController extends Controller
 {
@@ -22,7 +23,7 @@ class FlightController extends Controller
     /**
      * @Route("/flight", name="flight")
      */
-    public function searchFlight(Request $request)
+    public function searchAction(Request $request)
     {
 
       $data['flight'] = [] ;
@@ -31,7 +32,7 @@ class FlightController extends Controller
       $form = $this   ->createFormBuilder()
                       ->add('flyingFrom', TextType::class)
                       ->add('flyingTo', TextType::class)
-                      ->add('departing', DateType::class)
+                      ->add('departing', DateType::class , array('widget' => 'single_text'))
                       ->add('passengers', ChoiceType::class, array(
                         'choices' => array('1' => 1, '2' => 2 , '3' => 3)
                     ))
@@ -77,37 +78,22 @@ class FlightController extends Controller
     * @Route("/createflight", name="createflight")
     * @Security("is_granted('ROLE_ADMIN')")
     */
-    public function createFlight(Request $request){
+    public function createAction(Request $request){
 
       $flight = new Flight();
 
-      $form= $this  ->createFormBuilder()
-                    ->add('flyingFrom')
-                    ->add('flyingTo')
-                    ->add('departing', DateType::class)
-                    ->add('seatsLeft')
-                    ->add('flightNumber')
-                    ->add('create' , SubmitType::class, array('label'=>'create flight'))
-                    ->getForm();
-
+      $form = $this->createForm(FlightType::class, $flight, [] );
 
       $form->handleRequest($request);
 
       if($form->isSubmitted() && $form->isValid()){
-        $form_data = $form->getData();
 
         $em = $this->getDoctrine()->getManager();
-
-        $flight->setFlyingFrom($form_data['flyingFrom']);
-        $flight->setFlyingTo($form_data['flyingTo']);
-        $flight->setDepartingDate($form_data['departing']);
-        $flight->setSeatsLeft($form_data['seatsLeft']);
-        $flight->setFlightNumber($form_data['flightNumber']);
 
         $em->persist($flight);
         $em->flush();
 
-        $this->addFlash('info', 'Flight Created : ' . $form_data['flightNumber'] );
+        $this->addFlash('info', 'Flight Created : ' . $flight->getFlightNumber() );
 
       }
 
@@ -121,7 +107,7 @@ class FlightController extends Controller
     * @Route("/manageFlight", name="manageFlight")
     * @Security("is_granted('ROLE_USER')")
     */
-    public function manageFlight(Request $request){
+    public function manageAction(Request $request){
 
       $user = $this->container->get('security.token_storage')->getToken()->getUser();
       $repo = $this->getDoctrine()->getRepository(Flight::class);
@@ -140,10 +126,16 @@ class FlightController extends Controller
      */
     public function listAction(Request $request)
     {
-      $flights = $this->getDoctrine()->getRepository(Flight::class)->findAll();
+      $flightQuery = $this->getDoctrine()->getRepository(Flight::class)->getQueryAllFlights();
+
+      $paginator = $this->get('knp_paginator');
+      $pagination = $paginator->paginate(
+        $flightQuery,
+        $request->query->getInt('page', 1),
+        5);
 
         return $this->render('flight/listflights.html.twig', [
-          'flights' => $flights,
+          'pagination' => $pagination,
         ]);
     }
 
@@ -158,12 +150,10 @@ class FlightController extends Controller
       $em->remove($flightToRemove);
       $em->flush();
 
-      $flights = $this->getDoctrine()->getRepository(Flight::class)->findAll();
-
       $this->addFlash('info', 'Flight Deleted : ' . $flightNumber);
 
-      return $this->render('flight/listflights.html.twig', [
-          'flights' => $flights,
+      return $this->redirectToRoute('listflights', [
+
       ]);
     }
 

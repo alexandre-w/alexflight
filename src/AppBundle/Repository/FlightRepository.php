@@ -31,13 +31,13 @@ class FlightRepository extends \Doctrine\ORM\EntityRepository
     return $query->getResult();
   }
 
+  public function getQueryAllFlights(){
+    $em = $this->getEntityManager();
 
-  public function getFlight($flightId){
-
-    $flight = $this->find($flightId);
-
-    return $flight ;
-
+    return $em->createQueryBuilder()
+                      ->select('f')
+                      ->from('AppBundle:Flight', 'f')
+                      ->getQuery();
   }
 
 
