@@ -123,6 +123,7 @@ class FlightController extends Controller
 
     /**
      * @Route("/listflights", name="listflights")
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function listAction(Request $request)
     {
@@ -141,6 +142,7 @@ class FlightController extends Controller
 
     /**
      * @Route("/removeflight/{flightId}", name="removeflight")
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function removeAction(Request $request, $flightId){
 
