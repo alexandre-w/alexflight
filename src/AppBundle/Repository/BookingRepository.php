@@ -14,26 +14,5 @@ use AppBundle\Entity\Customer;
  */
 class BookingRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function bookAFlight($flightId, $customerId ){
-
-      $em = $this->getEntityManager();
-      $qb = $em->createQueryBuilder();
-
-      $results = $qb->select('f')
-                	->from('AppBundle:Flight', 'f')
-                	->where('f.id  = :flightId')
-                  ->setParameter('flightId' , $flightId)
-                	->getQuery()
-                	->getResult();
-
-      try {
-
-        	return $results;
-    	} catch (\Doctrine\ORM\NoResultException $e) {
-        	return null;
-    	}
-
-    }
-
 
 }

@@ -2,35 +2,58 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Mapping as ORM;
+use \AppBundle\Entity\Booking;
+use \AppBundle\Entity\City;
+
 /**
- * Flight
- */
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\FlightRepository")
+ * @ORM\Table(name="flights")
+ **/
 class Flight
 {
     /**
-     * @var int
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @var string
-     */
+     * @ORM\ManyToOne(targetEntity="City", inversedBy="flightedFrom")
+     **/
     private $flyingFrom;
 
     /**
-     * @var string
-     */
+     * @ORM\ManyToOne(targetEntity="City", inversedBy="flightedTo")
+     **/
     private $flyingTo;
 
     /**
-     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     * @var DateTime
      */
     private $departingDate;
 
     /**
+     * @ORM\Column(type="integer")
      * @var int
      */
     private $seatsLeft;
+
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
+    private $flightNumber;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Booking", mappedBy="flight")
+    * @var Booking[] An ArrayCollection of Booking objects.
+    **/
+    private $bookedFlights = null ;
 
 
     /**
@@ -43,13 +66,6 @@ class Flight
         return $this->id;
     }
 
-    /**
-     * Set flyingFrom
-     *
-     * @param string $flyingFrom
-     *
-     * @return Flight
-     */
     public function setFlyingFrom($flyingFrom)
     {
         $this->flyingFrom = $flyingFrom;
@@ -57,23 +73,13 @@ class Flight
         return $this;
     }
 
-    /**
-     * Get flyingFrom
-     *
-     * @return string
-     */
+
     public function getFlyingFrom()
     {
         return $this->flyingFrom;
     }
 
-    /**
-     * Set flyingTo
-     *
-     * @param string $flyingTo
-     *
-     * @return Flight
-     */
+
     public function setFlyingTo($flyingTo)
     {
         $this->flyingTo = $flyingTo;
@@ -81,11 +87,6 @@ class Flight
         return $this;
     }
 
-    /**
-     * Get flyingTo
-     *
-     * @return string
-     */
     public function getFlyingTo()
     {
         return $this->flyingTo;
@@ -138,10 +139,6 @@ class Flight
     {
         return $this->seatsLeft;
     }
-    /**
-     * @var string
-     */
-    private $flightNumber;
 
 
     /**
@@ -168,50 +165,24 @@ class Flight
         return $this->flightNumber;
     }
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $bookings;
-
-    /**
-     * Constructor
-     */
     public function __construct()
     {
-        $this->bookings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bookedFlights = new ArrayCollection();
     }
 
-    /**
-     * Add booking
-     *
-     * @param \AppBundle\Entity\Booking $booking
-     *
-     * @return Flight
-     */
-    public function addBooking(\AppBundle\Entity\Booking $booking)
+    public function addBookedFlight(Booking $booking)
     {
-        $this->bookings[] = $booking;
-
-        return $this;
+        $this->bookedFlights[] = $booking;
     }
 
-    /**
-     * Remove booking
-     *
-     * @param \AppBundle\Entity\Booking $booking
-     */
-    public function removeBooking(\AppBundle\Entity\Booking $booking)
+    public function removeBookedFlight(Booking $booking)
     {
-        $this->bookings->removeElement($booking);
+        $this->bookedFlights->removeElement($booking);
     }
 
-    /**
-     * Get bookings
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getBookings()
+    public function getBookedFlight()
     {
-        return $this->bookings;
+        return $this->bookedFlights;
     }
+
 }

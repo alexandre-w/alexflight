@@ -2,32 +2,48 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use \AppBundle\Entity\Flight;
+use \AppBundle\Entity\Customer;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
- * Booking
- *
- * @ORM\Table(name="booking")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\BookingRepository")
- */
+ * @ORM\Table(name="bookings")
+ **/
 class Booking
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+  /**
+   * @ORM\Column(type="integer")
+   * @ORM\Id
+   * @ORM\GeneratedValue(strategy="AUTO")
+   */
     private $id;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="bookingDate", type="datetime", nullable=true)
+     * @ORM\Column(type="datetime")
+     * @var DateTime
      */
     private $bookingDate;
 
+    /**
+     * @ORM\Column(type="integer")
+     * @var int
+     */
+    private $reservedSeats;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="bookedCustomers")
+     **/
+    private $customer;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Flight", inversedBy="bookedFlights")
+     **/
+    private $flight;
 
     /**
      * Get id
@@ -62,68 +78,33 @@ class Booking
     {
         return $this->bookingDate;
     }
-    /**
-     * @var \AppBundle\Entity\Customer
-     */
-    private $customer;
-
-    /**
-     * @var \AppBundle\Entity\Flight
-     */
-    private $flight;
 
 
-    /**
-     * Set customer
-     *
-     * @param \AppBundle\Entity\Customer $customer
-     *
-     * @return Booking
-     */
-    public function setCustomer(\AppBundle\Entity\Customer $customer = null)
+
+
+    public function setCustomer(Customer $customer = null)
     {
-        $this->customer = $customer;
 
-        return $this;
+        $this->customer = $customer;
     }
 
-    /**
-     * Get customer
-     *
-     * @return \AppBundle\Entity\Customer
-     */
     public function getCustomer()
     {
         return $this->customer;
     }
 
-    /**
-     * Set flight
-     *
-     * @param \AppBundle\Entity\Flight $flight
-     *
-     * @return Booking
-     */
-    public function setFlight(\AppBundle\Entity\Flight $flight = null)
-    {
-        $this->flight = $flight;
 
-        return $this;
+    public function setFlight(Flight $flight = null)
+    {
+      $flight->addBookedFlight(this);
+      $this->flight = $flight;
     }
 
-    /**
-     * Get flight
-     *
-     * @return \AppBundle\Entity\Flight
-     */
     public function getFlight()
     {
         return $this->flight;
     }
-    /**
-     * @var integer
-     */
-    private $reservedSeats;
+
 
 
     /**

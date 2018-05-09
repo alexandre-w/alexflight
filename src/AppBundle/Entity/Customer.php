@@ -4,27 +4,36 @@ namespace AppBundle\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Mapping as ORM;
+use \AppBundle\Entity\Booking;
 
 /**
- * Customer
- * @UniqueEntity("username")
- */
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CustomerRepository")
+ * @ORM\Table(name="customers")
+ **/
 class Customer implements UserInterface
 {
-    /**
-     * @var int
-     */
+    /** @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     **/
     private $id;
 
-    /**
+    /** @ORM\Column(type="string")
      * @var string
-     */
+     **/
     private $username;
 
-    /**
+    /** @ORM\Column(type="string")
      * @var string
-     */
+     **/
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Booking", mappedBy="customer")
+     * @var Booking[] An ArrayCollection of Booking objects.
+     **/
+    private $bookedCustomers;
 
 
     /**
@@ -114,50 +123,29 @@ class Customer implements UserInterface
     public function eraseCredentials(){
       $this->plainPassword = null;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $bookings;
 
-    /**
-     * Constructor
-     */
+
+    /** Constructor **/
     public function __construct()
     {
-        $this->bookings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bookedCustomers = new ArrayCollection();
     }
 
-    /**
-     * Add booking
-     *
-     * @param \AppBundle\Entity\Booking $booking
-     *
-     * @return Customer
-     */
-    public function addBooking(\AppBundle\Entity\Booking $booking)
-    {
-        $this->bookings[] = $booking;
 
-        return $this;
+    public function addBookedCustomer(Booking $booking)
+    {
+        $this->bookedCustomers[] = $booking;
     }
 
-    /**
-     * Remove booking
-     *
-     * @param \AppBundle\Entity\Booking $booking
-     */
-    public function removeBooking(\AppBundle\Entity\Booking $booking)
+
+    public function removeBookedCustomer(Booking $booking)
     {
-        $this->bookings->removeElement($booking);
+        $this->bookedCustomers->removeElement($booking);
     }
 
-    /**
-     * Get bookings
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getBookings()
+
+    public function getBookedCustomer()
     {
-        return $this->bookings;
+        return $this->bookedCustomers;
     }
 }
