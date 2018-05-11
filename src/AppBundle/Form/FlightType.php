@@ -8,7 +8,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Entity\Flight;
+use AppBundle\Form\CityType;
 
 class FlightType extends AbstractType
 {
@@ -17,8 +19,16 @@ class FlightType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('flyingFrom', TextType::class)
-                ->add('flyingTo', TextType::class)
+        $builder->add('flyingFrom', EntityType::class, array (
+                  'class'         => 'AppBundle:City',
+                  'choice_label'  => 'name',
+                  'multiple'      => false,
+                ))
+                ->add('flyingTo', EntityType::class, array(
+                  'class'         => 'AppBundle:City',
+                  'choice_label'  => 'name',
+                  'multiple'      => false,
+                ))
                 ->add('departingDate', DateType::class,
                       array('widget' => 'single_text' ,
                              ))

@@ -24,8 +24,8 @@ Create a flight - AlexTravel
     {% for booking in customerBookings %}
     <tr>
       <th scope "row">{{ booking.flight.flightNumber }}</th>
-      <td>{{ booking.flight.flyingFrom }}</td>
-      <td>{{ booking.flight.flyingTo }}</td>
+      <td>{{ booking.flight.flyingFrom.name | capitalize }}</td>
+      <td>{{ booking.flight.flyingTo.name | capitalize }}</td>
       <td>{{ booking.flight.departingDate |date("d/m/Y")  }}</td>
       <td>{{ booking.reservedSeats}}</td>
     </tr>

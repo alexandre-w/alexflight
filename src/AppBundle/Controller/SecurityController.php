@@ -14,9 +14,11 @@ class SecurityController extends Controller
     public function loginAction()
     {
 
-        return $this->render('security/login.html.twig', [
+      $authenticationUtils = $this->get('security.authentication_utils');
 
-        ]);
+     return $this->render('security/login.html.twig', array(
+       'error'         => $authenticationUtils->getLastAuthenticationError(),
+     ));
     }
 
     /**

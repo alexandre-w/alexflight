@@ -25,8 +25,8 @@ List of flights - AlexTravel
     {% for flight in pagination %}
     <tr>
       <th scope "row">{{ flight.flightNumber }}</th>
-      <td>{{ flight.flyingFrom |capitalize}}</td>
-      <td>{{ flight.flyingTo |capitalize}}</td>
+      <td>{{ flight.flyingFrom.name |capitalize}}</td>
+      <td>{{ flight.flyingTo.name |capitalize}}</td>
       <td>{{ flight.departingDate |date("d/m/Y")  }}</td>
       <td>{{ flight.seatsLeft}}</td>
       <td>

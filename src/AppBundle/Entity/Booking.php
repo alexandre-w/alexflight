@@ -84,7 +84,7 @@ class Booking
 
     public function setCustomer(Customer $customer = null)
     {
-
+        $customer->addBookedCustomer($this);
         $this->customer = $customer;
     }
 
@@ -96,7 +96,7 @@ class Booking
 
     public function setFlight(Flight $flight = null)
     {
-      $flight->addBookedFlight(this);
+      $flight->addBookedFlight($this);
       $this->flight = $flight;
     }
 
@@ -130,4 +130,11 @@ class Booking
     {
         return $this->reservedSeats;
     }
+
+    /** Constructor **/
+    public function __construct()
+    {
+        $this->bookingDate = new \Datetime();
+    }
+
 }

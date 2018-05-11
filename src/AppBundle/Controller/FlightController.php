@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class FlightController extends Controller
 {
@@ -30,8 +31,16 @@ class FlightController extends Controller
       $nbrPassengers = 0 ;
 
       $form = $this   ->createFormBuilder()
-                      ->add('flyingFrom', TextType::class)
-                      ->add('flyingTo', TextType::class)
+                      ->add('flyingFrom', EntityType::class, array(
+                        'class'         => 'AppBundle:City',
+                        'choice_label'  => 'name',
+                        'multiple'      => false,
+                      ))
+                      ->add('flyingTo', EntityType::class, array(
+                        'class'         => 'AppBundle:City',
+                        'choice_label'  => 'name',
+                        'multiple'      =>  false,
+                      ))
                       ->add('departing', DateType::class , array('widget' => 'single_text'))
                       ->add('passengers', ChoiceType::class, array(
                         'choices' => array('1' => 1, '2' => 2 , '3' => 3)
@@ -91,6 +100,7 @@ class FlightController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $em->persist($flight);
+
         $em->flush();
 
         $this->addFlash('info', 'Flight Created : ' . $flight->getFlightNumber() );

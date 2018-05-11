@@ -4,8 +4,11 @@ namespace AppBundle\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use \AppBundle\Entity\Booking;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CustomerRepository")
@@ -122,6 +125,18 @@ class Customer implements UserInterface
 
     public function eraseCredentials(){
       $this->plainPassword = null;
+    }
+
+    /**
+    * @Assert\Callback
+    */
+    public function isPasswordValid(ExecutionContextInterface $context){
+      if($this->getUsername() == $this->getPlainPassword()){
+        $context->buildViolation('The username and the password is equal')
+                ->atPath('passord')
+                ->addViolation();
+      }
+
     }
 
 

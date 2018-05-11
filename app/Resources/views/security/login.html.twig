@@ -8,6 +8,11 @@ Login - AlexTravel
 {% block body %}
 
 <div class="container">
+<div clas="row">
+{% if error %}
+  <div class="alert alert-danger">{{ error.message }}</div>
+{% endif %}
+</div>
 <div class="row">
 
 
