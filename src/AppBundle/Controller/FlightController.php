@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class FlightController extends Controller
@@ -31,20 +32,14 @@ class FlightController extends Controller
       $nbrPassengers = 0 ;
 
       $form = $this   ->createFormBuilder()
-                      ->add('flyingFrom', EntityType::class, array(
-                        'class'         => 'AppBundle:City',
-                        'choice_label'  => 'name',
-                        'multiple'      => false,
-                      ))
-                      ->add('flyingTo', EntityType::class, array(
-                        'class'         => 'AppBundle:City',
-                        'choice_label'  => 'name',
-                        'multiple'      =>  false,
-                      ))
+                      ->add('flyingFrom', TextType::class)
+                      ->add('flyingFromId', HiddenType::class)
+                      ->add('flyingTo', TextType::class)
+                      ->add('flyingToId', HiddenType::class)
                       ->add('departing', DateType::class , array('widget' => 'single_text'))
                       ->add('passengers', ChoiceType::class, array(
                         'choices' => array('1' => 1, '2' => 2 , '3' => 3)
-                    ))
+                      ))
                       ->add('search' , SubmitType::class, array('label'=>'Search flights'))
                       ->getForm();
 
@@ -56,8 +51,8 @@ class FlightController extends Controller
           $repo = $this->getDoctrine()->getRepository(Flight::class);
 
           $flights = $repo->getAvailableFlights($form_data['departing'],
-                                                    $form_data['flyingFrom'],
-                                                    $form_data['flyingTo'],
+                                                    $form_data['flyingFromId'],
+                                                    $form_data['flyingToId'],
                                                     $form_data['passengers']);
 
           $nbrPassengers = $form_data['passengers'] ;

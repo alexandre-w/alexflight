@@ -10,5 +10,18 @@ namespace AppBundle\Repository;
  */
 class CityRepository extends \Doctrine\ORM\EntityRepository
 {
+  public function getCityWithLike($cityname){
+    $em = $this->getEntityManager();
+    $qb = $em->createQueryBuilder();
 
+    $qb->select('c')
+        ->from('AppBundle:City', 'c');
+
+    $qb->add('where', $qb->expr()->orX(
+       $qb->expr()->like('c.name', '?1')
+       ))
+       ->setParameter('1' , $cityname . '%');
+
+    return $qb->getQuery()->getResult();
+  }
 }

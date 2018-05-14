@@ -54,5 +54,28 @@ Search a flight - AlexTravel
 
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+
+<script>
+
+$('#form_flyingFrom').autocomplete({
+    source : "http://localhost:8000/city",
+    select: function( event, ui ) {
+          $( "#form_flyingFromId" ).val( ui.item.id );
+    },
+});
+
+$('#form_flyingTo').autocomplete({
+    source : "http://localhost:8000/city",
+    select: function( event, ui ) {
+          $( "#form_flyingToId" ).val( ui.item.id );
+    },
+});
+
+
+
+</script>
 
 {% endblock %}

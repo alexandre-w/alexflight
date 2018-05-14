@@ -94,4 +94,14 @@ class City
         return $this->flightedTo;
     }
 
+    public function serializeForAutocomplete()
+    {
+        return array(
+            'id' => $this->getId(),
+            'label' => $this->getName(),
+            'value' => $this->getName(),
+        );
+    }
+
+
 }
